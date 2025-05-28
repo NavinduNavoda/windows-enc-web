@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 	"text/template"
@@ -246,6 +247,9 @@ func main() {
 		tmpl.ExecuteTemplate(w, "index", data)
 	})
 
-	fmt.Println("Server is running on http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	port := flag.String("port", "8080", "Port to run the server on")
+	flag.Parse()
+
+	fmt.Printf("Server is running on http://localhost:%s\n", *port)
+	http.ListenAndServe(":"+*port, nil)
 }
