@@ -1,0 +1,400 @@
+{{define "index"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Encryption Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            background: white;
+        }
+        
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .header {
+            color: #374151;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .forms-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1024px) {
+            .forms-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+        
+        .form-section {
+            flex: 1;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 30px;
+        }
+        
+        .form-section h2 {
+            color: #374151;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+        
+        /* Credential subsection styling */
+        .cred-subsection {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .cred-subsection:last-child {
+            margin-bottom: 0;
+        }
+        
+        .cred-subsection h3 {
+            color: #374151;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: 600;
+        }
+        
+        .form-group textarea,
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group textarea:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #374151;
+        }
+        
+        .btn {
+            background: #374151;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: #1f2937;
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        
+        .btn-copy {
+            background: #059669;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .btn-copy:hover {
+            background: #047857;
+        }
+        
+        .btn-copy.copied {
+            background: #10b981;
+        }
+        
+        .notification {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+        
+        .notification.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .notification.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        
+        .output-section {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 25px;
+            background: #f8fafc;
+        }
+        
+        .output-section h3 {
+            color: #374151;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .output {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #e5e7eb;
+            font-family: monospace;
+            word-wrap: break-word;
+            min-height: 40px;
+        }
+        
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Text Encryption Tool</h1>
+            <p>Secure your messages with encryption and decryption</p>
+        </div>
+        
+        <div class="content">
+            <div class="forms-container">
+                <div class="form-section">
+                    <h2>🔑 Credential Management</h2>
+                    
+                    {{if .CredSuccMsg}}
+                    <div class="notification success">{{.CredSuccMsg}}</div>
+                    {{end}}
+                    
+                    {{if .CredErrMsg}}
+                    <div class="notification error">{{.CredErrMsg}}</div>
+                    {{end}}
+                    
+                    <!-- Create Credential -->
+                    <div class="cred-subsection">
+                        <h3>Create Credential</h3>
+                        <form action="/create-cred" method="post">
+                            <div class="form-group">
+                                <label for="credential-target">Credential Target Name:</label>
+                                <input type="text" id="credential-target" name="credential" placeholder="Enter credential target name..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="credential-key">Key:</label>
+                                <button type="button" class="btn-secondary" onclick="generateAESKey()">Generate AES-256 Key</button>
+                                <input type="text" id="credential-key" name="key" placeholder="Enter or generate key..." required>
+                            </div>
+                            <button type="submit" class="btn">Create Credential</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Find Credential -->
+                    <div class="cred-subsection">
+                        <h3>Find Credential</h3>
+                        <form action="/find-cred" method="post">
+                            <div class="form-group">
+                                <label for="find-credential-target">Credential Target Name:</label>
+                                <input type="text" id="find-credential-target" name="credential" placeholder="Enter credential target name..." required>
+                            </div>
+                            <button type="submit" class="btn">Find Credential</button>
+                        </form>
+                        
+                        {{if .Credout}}
+                        <div class="output-section">
+                            <div class="output-header">
+                                <h3>🔍 Found Credential</h3>
+                                <button type="button" class="btn-copy" onclick="copyToClipboard('credout', this)">📋 Copy</button>
+                            </div>
+                            <div class="output" id="credout">{{.Credout}}</div>
+                        </div>
+                        {{end}}
+                    </div>
+                    
+                    <!-- Delete Credential -->
+                    <div class="cred-subsection">
+                        <h3>Delete Credential</h3>
+                        <form action="/del-cred" method="post">
+                            <div class="form-group">
+                                <label for="delete-credential-target">Credential Target Name:</label>
+                                <input type="text" id="delete-credential-target" name="credential" placeholder="Enter credential target name..." required>
+                            </div>
+                            <button type="submit" class="btn" style="background: #dc2626;" onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">Delete Credential</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2>🔒 Encrypt Text</h2>
+                    
+                    {{if .EncSuccMsg}}
+                    <div class="notification success">{{.EncSuccMsg}}</div>
+                    {{end}}
+                    
+                    {{if .EncErrMsg}}
+                    <div class="notification error">{{.EncErrMsg}}</div>
+                    {{end}}
+                    
+                    <form action="/encrypt" method="post">
+                        <div class="form-group">
+                            <label for="encrypt-text">Enter text to encrypt:</label>
+                            <textarea id="encrypt-text" name="text" rows="4" placeholder="Type your message here..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="encrypt-credential">Credential Target:</label>
+                            <input type="text" id="encrypt-credential" name="credential" placeholder="Enter credential target..." required>
+                        </div>
+                        <button type="submit" class="btn">Encrypt Message</button>
+                    </form>
+                    
+                    {{if .Encout}}
+                    <div class="output-section">
+                        <div class="output-header">
+                            <h3>🔒 Encrypted Result</h3>
+                            <button type="button" class="btn-copy" onclick="copyToClipboard('encout', this)">📋 Copy</button>
+                        </div>
+                        <div class="output" id="encout">{{.Encout}}</div>
+                    </div>
+                    {{end}}
+                </div>
+                
+                <div class="form-section">
+                    <h2>🔓 Decrypt Text</h2>
+                    
+                    {{if .DecSuccMsg}}
+                    <div class="notification success">{{.DecSuccMsg}}</div>
+                    {{end}}
+                    
+                    {{if .DecErrMsg}}
+                    <div class="notification error">{{.DecErrMsg}}</div>
+                    {{end}}
+                    
+                    <form action="/decrypt" method="post">
+                        <div class="form-group">
+                            <label for="decrypt-text">Enter text to decrypt:</label>
+                            <textarea id="decrypt-text" name="text" rows="4" placeholder="Paste encrypted message here..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="decrypt-credential">Credential Target:</label>
+                            <input type="text" id="decrypt-credential" name="credential" placeholder="Enter credential target..." required>
+                        </div>
+                        <button type="submit" class="btn">Decrypt Message</button>
+                    </form>
+                    
+                    {{if .Decout}}
+                    <div class="output-section">
+                        <div class="output-header">
+                            <h3>🔓 Decrypted Result</h3>
+                            <button type="button" class="btn-copy" onclick="copyToClipboard('decout', this)">📋 Copy</button>
+                        </div>
+                        <div class="output" id="decout">{{.Decout}}</div>
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateAESKey() {
+            const array = new Uint8Array(32); // 256 bits = 32 bytes
+            crypto.getRandomValues(array);
+            const base64Key = btoa(String.fromCharCode.apply(null, array));
+            document.getElementById('credential-key').value = base64Key;
+        }
+        
+        function copyToClipboard(elementId, button) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent || element.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
+{{end}}

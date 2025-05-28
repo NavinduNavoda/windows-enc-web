@@ -1,0 +1,3 @@
+module github.com/NavinduNavoda
+
+go 1.24.3
