@@ -8,7 +8,9 @@ import (
 
 const (
 	CRED_TYPE_GENERIC          = 1
+	CRED_PERSIST_SESSION       = 1
 	CRED_PERSIST_LOCAL_MACHINE = 2
+	CRED_PERSIST_ENTERPRISE    = 3
 )
 
 type CREDENTIAL struct {
@@ -45,7 +47,28 @@ func WriteCredential(target, username, password string) error {
 		UserName:           userPtr,
 		CredentialBlobSize: uint32(len(passBytes)),
 		CredentialBlob:     &passBytes[0],
-		Persist:            CRED_PERSIST_LOCAL_MACHINE,
+		Persist:            CRED_PERSIST_ENTERPRISE,
+	}
+
+	ret, _, err := procCredWriteW.Call(uintptr(unsafe.Pointer(&cred)), 0)
+	if ret == 0 {
+		return fmt.Errorf("CredWriteW failed: %v", err)
+	}
+	return nil
+}
+
+func WriteCredentialWithPersist(target, username, password string, persistance int) error {
+	targetPtr, _ := syscall.UTF16PtrFromString(target)
+	userPtr, _ := syscall.UTF16PtrFromString(username)
+	passBytes := []byte(password)
+
+	cred := CREDENTIAL{
+		Type:               CRED_TYPE_GENERIC,
+		TargetName:         targetPtr,
+		UserName:           userPtr,
+		CredentialBlobSize: uint32(len(passBytes)),
+		CredentialBlob:     &passBytes[0],
+		Persist:            uint32(persistance),
 	}
 
 	ret, _, err := procCredWriteW.Call(uintptr(unsafe.Pointer(&cred)), 0)

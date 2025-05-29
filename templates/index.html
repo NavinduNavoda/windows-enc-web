@@ -112,6 +112,14 @@
             font-size: 16px;
             transition: border-color 0.3s ease;
         }
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
         
         .form-group textarea:focus,
         .form-group input:focus {
@@ -259,6 +267,14 @@
                                 <label for="credential-key">Key:</label>
                                 <button type="button" class="btn-secondary" onclick="generateAESKey()">Generate AES-256 Key</button>
                                 <input type="text" id="credential-key" name="key" placeholder="Enter or generate key..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="persistence-mode">Persistence Mode:</label>
+                                <select id="persistence-mode" name="persistence" required>
+                                    <option value="1">Session</option>
+                                    <option value="2">Local Machine</option>
+                                    <option value="3" selected>Enterprise</option>
+                                </select>
                             </div>
                             <button type="submit" class="btn">Create Credential</button>
                         </form>

@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"strconv"
 	"text/template"
 
 	"github.com/NavinduNavoda/helpers/cryp"
@@ -150,9 +151,24 @@ func main() {
 		r.ParseForm()
 		key := r.FormValue("key")
 		targetName := r.FormValue("credential")
+		persistence, err := strconv.Atoi(r.FormValue("persistence"))
+		if err != nil || persistence < 0 || persistence > 3 {
+			data := PageData{
+				Encout:      "",
+				Decout:      "",
+				CredSuccMsg: "",
+				CredErrMsg:  "Invalid persistence value: " + err.Error(),
+				EncSuccMsg:  "",
+				EncErrMsg:   "",
+				DecSuccMsg:  "",
+				DecErrMsg:   "",
+			}
+			tmpl.ExecuteTemplate(w, "index", data)
+			return
+		}
 
 		var data PageData
-		err := wincred.WriteCredential(targetName, "", key)
+		err = wincred.WriteCredentialWithPersist(targetName, "", key, persistence)
 		if err != nil {
 			data = PageData{
 				Encout:      "",
